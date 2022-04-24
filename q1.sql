@@ -37,7 +37,7 @@ CREATE TABLE Robbers(
 );
 CREATE TABLE Skills(
     SkillId INT PRIMARY KEY NOT NULL CHECK(SkillId >= 0),
-    Description CHAR(25) NOT NULL
+    Description CHAR(25) UNIQUE NOT NULL
 );
 CREATE TABLE HasSkills(
     RobberId INT NOT NULL REFERENCES Robbers(RobberId),
@@ -46,6 +46,8 @@ CREATE TABLE HasSkills(
     Grade CHAR(3) NOT NULL,
     CONSTRAINT HasSkillsPK PRIMARY KEY(RobberId, SkillId)
 );
+ALTER TABLE Hasskills
+ADD CONSTRAINT id_preference_unique UNIQUE (RobberId, Preference);
 CREATE TABLE HasAccounts(
     RobberId INT NOT NULL REFERENCES Robbers(RobberId),
     BankName CHAR(30) NOT NULL,
@@ -62,4 +64,10 @@ CREATE TABLE Accomplices(
     CONSTRAINT AccomplicesPK PRIMARY KEY (RobberId, BankName, City, Date),
     CONSTRAINT AccomplicesFK_2 FOREIGN KEY(BankName, City) REFERENCES Banks(BankName, City),
     CONSTRAINT AccomplicesFK_3 FOREIGN KEY(BankName, City, Date) REFERENCES Robberies(BankName, City, Date)
+);
+CREATE TABLE TempSkills (
+    RobberNicknameTemp CHAR(25) NOT NULL,
+    DescriptionTemp CHAR(25) NOT NULL,
+    PreferenceTemp INT NOT NULL CHECK(PreferenceTemp >= 0),
+    GradeTemp CHAR(3) NOT NULL
 );
